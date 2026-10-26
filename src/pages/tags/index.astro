@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedPosts, getTags, tagHref } from '../../utils/posts';
+
+const tags = getTags(await getPublishedPosts());
+---
+<BaseLayout title="标签" description="按标签浏览 Tomo 的文章">
+  <section class="page-heading"><p class="eyebrow">TOPICS</p><h1>标签</h1><p>从感兴趣的主题开始阅读。</p></section>
+  {tags.length > 0 ? (
+    <ul class="tag-index">
+      {tags.map(({ name, count }) => (
+        <li><a href={tagHref(name)}>{name} <span aria-label={count + ' 篇文章'}>({count})</span></a></li>
+      ))}
+    </ul>
+  ) : <p>目前还没有标签。</p>}
+</BaseLayout>

@@ -1,0 +1,80 @@
+# Dependencies and package-manager caches (keep package-lock.json)
+node_modules/
+.npm/
+.pnpm-store/
+
+# Astro/Vite build output and generated caches
+/dist/
+.astro/
+.cache/
+.vite/
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+
+# Environment variables and local authentication
+.env
+.env.*
+!.env.example
+.npmrc
+.ssh/
+secrets/
+credentials*.json
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Private drafts and notes: do not place these in public/ or published content
+/private/
+# Preserve the existing policy for internal planning/release documents
+/docs/
+
+# Local databases and exported data; this static blog does not require them
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+/backups/
+
+# Local hosting-provider state (keep vercel.json/netlify.toml and workflows)
+.vercel/
+.netlify/
+.wrangler/
+
+# Test output, coverage and local diagnostics
+/coverage/
+/.nyc_output/
+/playwright-report/
+/test-results/
+/logs/
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor and temporary files
+/.vscode/
+/.idea/
+*.swp
+*.swo
+*~
+*.tmp
+*.temp
+*.bak
+*.orig
+/tmp/
+/temp/
+
+# Operating-system metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/

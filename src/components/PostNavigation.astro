@@ -1,0 +1,14 @@
+---
+import { postHref, type Post } from '../utils/posts';
+
+interface Props { previous: Post | null; next: Post | null; }
+const { previous, next } = Astro.props;
+---
+{(previous || next) && (
+  <nav class="post-navigation" aria-label="相邻文章">
+    {previous ? (
+      <a href={postHref(previous.id)}><span>上一篇</span><strong>{previous.data.title}</strong></a>
+    ) : <span aria-hidden="true" />}
+    {next && <a href={postHref(next.id)}><span>下一篇</span><strong>{next.data.title}</strong></a>}
+  </nav>
+)}

@@ -1,0 +1,12 @@
+---
+import TocList from './TocList.astro';
+import { buildToc, type Heading } from '../utils/toc';
+interface Props { headings: Heading[]; }
+const items = buildToc(Astro.props.headings);
+---
+{items.length > 0 && (
+  <nav class="toc" aria-label="文章目录">
+    <h2>本文目录</h2>
+    <TocList items={items} />
+  </nav>
+)}

@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts, postHref } from '../utils/posts';
+import { groupPostsByYearMonth } from '../utils/browse';
+
+const archive = groupPostsByYearMonth(await getPublishedPosts());
+---
+<BaseLayout title="归档" description="按年份和月份浏览已发布文章">
+  <section class="page-heading"><p class="eyebrow">ARCHIVE</p><h1>归档</h1><p>按年月回顾写过的文章，最新的排在前面。</p></section>
+  {archive.length > 0 ? (
+    <>
+      <nav class="archive-years" aria-label="归档年份">
+        {archive.map(({ year, count }) => <a href={`#year-${year}`}>{year} 年 <span>{count} 篇</span></a>)}
+      </nav>
+      {archive.map(({ year, count, months }) => (
+        <section class="archive-year" aria-labelledby={`year-${year}`}>
+          <h2 id={`year-${year}`}>{year} 年 <span>{count} 篇</span></h2>
+          {months.map(({ month, posts }) => (
+            <section class="archive-month" aria-labelledby={`month-${year}-${month}`}>
+              <h3 id={`month-${year}-${month}`}>{month} 月 <span>{posts.length} 篇</span></h3>
+              <ul class="archive-posts">
+                {posts.map((post) => (
+                  <li>
+                    <time datetime={post.data.pubDate.toISOString().slice(0, 10)}>{post.data.pubDate.toISOString().slice(0, 10)}</time>
+                    <a href={postHref(post.id)}>{post.data.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </section>
+      ))}
+    </>
+  ) : <p>还没有已发布文章，归档将在发布第一篇文章后显示。</p>}
+</BaseLayout>

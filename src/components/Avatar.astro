@@ -1,0 +1,15 @@
+---
+import { Image } from 'astro:assets';
+import avatar from '../assets/avatar.jpg';
+import { siteConfig } from '../config/site';
+---
+<Image
+  src={avatar}
+  alt={`${siteConfig.author} 的头像`}
+  width={128}
+  height={128}
+  widths={[128, 256]}
+  sizes="128px"
+  format="webp"
+  class="avatar"
+/>

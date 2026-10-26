@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Avatar from '../components/Avatar.astro';
+import { siteConfig } from '../config/site';
+---
+<BaseLayout title="关于" description={siteConfig.bio}>
+  <article class="prose">
+    <Avatar />
+    <p class="eyebrow">ABOUT</p><h1>你好，我是{siteConfig.author}。</h1>
+    <p>{siteConfig.bio}</p>
+    <h2>关于这个博客</h2><p>{siteConfig.description}</p>
+    <h2>联系我</h2><p>欢迎通过 <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> 与我交流。</p>
+  </article>
+</BaseLayout>

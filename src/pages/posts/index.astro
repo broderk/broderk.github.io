@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import PostPagination from '../../components/PostPagination.astro';
+import { getPublishedPosts, postHref } from '../../utils/posts';
+import { paginatePosts } from '../../utils/browse';
+
+const { posts, page, totalPages, totalPosts } = paginatePosts(await getPublishedPosts(), 1);
+---
+<BaseLayout title="文章" description={`共 ${totalPosts} 篇文章，按发布时间倒序浏览学习、实践与生活记录。`}>
+  <section class="page-heading"><p class="eyebrow">JOURNAL</p><h1>文章</h1><p>记录学习、实践与生活中的新发现。</p></section>
+  {posts.length > 0 ? (
+    <div class="post-grid">{posts.map((post) => <PostCard href={postHref(post.id)} {...post.data} />)}</div>
+  ) : <p>还没有发布文章，稍后再来看看吧。</p>}
+  <PostPagination page={page} totalPages={totalPages} totalPosts={totalPosts} />
+</BaseLayout>

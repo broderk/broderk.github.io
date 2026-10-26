@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+import PostPagination from '../../../components/PostPagination.astro';
+import { getPublishedPosts, postHref } from '../../../utils/posts';
+import { paginatePosts } from '../../../utils/browse';
+
+export async function getStaticPaths() {
+  const published = await getPublishedPosts();
+  const { totalPages } = paginatePosts(published, 1);
+  return Array.from({ length: totalPages - 1 }, (_, index) => ({
+    params: { page: String(index + 2) },
+    props: paginatePosts(published, index + 2),
+  }));
+}
+
+const { posts, page, totalPages, totalPosts } = Astro.props;
+---
+<BaseLayout title={`文章 · 第 ${page} 页`} description={`文章列表第 ${page} 页，共 ${totalPages} 页，继续浏览更早的文章。`}>
+  <section class="page-heading"><p class="eyebrow">JOURNAL</p><h1>文章</h1><p>第 {page} 页 · 按发布日期从新到旧浏览。</p></section>
+  <div class="post-grid">{posts.map((post) => <PostCard href={postHref(post.id)} {...post.data} />)}</div>
+  <PostPagination page={page} totalPages={totalPages} totalPosts={totalPosts} />
+</BaseLayout>

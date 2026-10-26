@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import Avatar from '../components/Avatar.astro';
+import { siteConfig } from '../config/site';
+import { getPublishedPosts, postHref } from '../utils/posts';
+
+const posts = (await getPublishedPosts()).slice(0, 3);
+---
+<BaseLayout>
+  <section class="intro">
+    <Avatar />
+    <p class="eyebrow">{siteConfig.author}</p>
+    <h1>{siteConfig.name}</h1>
+    <p class="lead">{siteConfig.description}</p>
+    <p class="intro-bio">{siteConfig.bio}</p>
+    <a class="button" href="/posts/">阅读全部文章 <span aria-hidden="true">→</span></a>
+  </section>
+  <section class="section-block" aria-labelledby="latest-heading">
+    <div class="section-heading"><h2 id="latest-heading">最新文章</h2><a href="/posts/">查看全部 →</a></div>
+    <div class="post-grid">{posts.map((post) => <PostCard href={postHref(post.id)} {...post.data} />)}</div>
+  </section>
+</BaseLayout>

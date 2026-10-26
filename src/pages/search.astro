@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+import { getPublishedPosts, postHref } from '../utils/posts';
+
+const developmentPosts = import.meta.env.DEV
+  ? (await getPublishedPosts()).map((post) => ({
+      title: post.data.title,
+      description: post.data.description,
+      tags: post.data.tags,
+      body: post.body ?? '',
+      url: postHref(post.id),
+    }))
+  : [];
+// Prevent article content from closing the JSON script element.
+const searchData = JSON.stringify(developmentPosts).replaceAll('<', '\\u003c');
+---
+<BaseLayout title="搜索" description={`搜索 ${siteConfig.name}中已发布的文章`} noindex>
+  <section class="page-heading">
+    <p class="eyebrow">DISCOVER</p>
+    <h1>搜索文章</h1>
+    <p>搜索标题、标签和正文，找到感兴趣的内容。</p>
+  </section>
+  <section class="search-page" aria-label="站内搜索">
+    {import.meta.env.DEV ? (
+      <>
+        <label class="search-label" for="development-search">搜索文章</label>
+        <input id="development-search" class="search-input" type="search" placeholder="输入关键词搜索文章" autocomplete="off" />
+        <p id="development-search-summary" class="search-summary" role="status" aria-live="polite">输入关键词，搜索已发布的文章。</p>
+        <div id="development-search-results" class="search-results"></div>
+        <script type="application/json" id="development-search-data" set:html={searchData} />
+        <script src="../scripts/dev-search.ts"></script>
+        <noscript><p class="search-note">站内搜索需要启用 JavaScript。也可以前往<a href="/posts/">文章列表</a>浏览全部文章。</p></noscript>
+      </>
+    ) : (
+      <>
+        <link rel="stylesheet" href="/pagefind/pagefind-component-ui.css" />
+        <script src="/pagefind/pagefind-component-ui.js" type="module"></script>
+        <pagefind-config bundle-path="/pagefind/"></pagefind-config>
+        <pagefind-input placeholder="输入关键词搜索文章"></pagefind-input>
+        <pagefind-summary default-message="输入关键词，搜索已发布的文章。"></pagefind-summary>
+        <pagefind-results></pagefind-results>
+        <noscript><p class="search-note">站内搜索需要启用 JavaScript。也可以前往<a href="/posts/">文章列表</a>浏览全部文章。</p></noscript>
+        <p class="search-note">没有找到匹配内容？换个关键词，或前往<a href="/posts/">文章列表</a>浏览。</p>
+      </>
+    )}
+  </section>
+</BaseLayout>

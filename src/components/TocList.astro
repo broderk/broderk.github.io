@@ -1,0 +1,13 @@
+---
+import type { TocNode } from '../utils/toc';
+interface Props { items: TocNode[]; }
+const { items } = Astro.props;
+---
+<ul class="toc-list">
+  {items.map((item) => (
+    <li data-heading-level={item.depth}>
+      <a href={'#' + encodeURIComponent(item.slug)}>{item.text}</a>
+      {item.children.length > 0 && <Astro.self items={item.children} />}
+    </li>
+  ))}
+</ul>

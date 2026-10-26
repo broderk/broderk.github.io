@@ -1,0 +1,45 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import PostNavigation from '../../components/PostNavigation.astro';
+import { getPublishedPosts, tagHref } from '../../utils/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      // 时间倒序：上一篇更早，下一篇更新；日期相同则按文章 ID 排序。
+      previous: posts[index + 1] ?? null,
+      next: posts[index - 1] ?? null,
+    },
+  }));
+}
+
+const { post, previous, next } = Astro.props;
+const { Content, headings } = await render(post);
+---
+<BaseLayout title={post.data.title} description={post.data.description}
+  article={{ published: post.data.pubDate, updated: post.data.updatedDate, tags: post.data.tags }} wide>
+  <article class:list={["article", { "has-toc": headings.length > 0 }]}>
+    <header class="article-header" data-pagefind-body>
+      <a class="back-link" href="/posts/" data-pagefind-ignore>← 返回文章列表</a>
+      <p class="post-date">{post.data.pubDate.toLocaleDateString('zh-CN')}</p>
+      <h1 data-pagefind-meta="title">{post.data.title}</h1><p class="article-description">{post.data.description}</p>
+      {post.data.tags.length > 0 && (
+        <div class="tags" aria-label="文章标签">{post.data.tags.map((tag) => <a href={tagHref(tag)}>{tag}</a>)}</div>
+      )}
+    </header>
+    <div class:list={["article-grid", { "has-toc": headings.length > 0 }]}>
+      {headings.length > 0 && (
+        <aside class="article-sidebar"><TableOfContents headings={headings} /></aside>
+      )}
+      <div class="article-body">
+        <div class="article-content" data-pagefind-body><Content /></div>
+        <PostNavigation previous={previous} next={next} />
+      </div>
+    </div>
+  </article>
+</BaseLayout>

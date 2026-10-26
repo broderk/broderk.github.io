@@ -1,0 +1,11 @@
+---
+interface Props { title: string; description: string; pubDate: Date; tags?: string[]; href: string; }
+import { tagHref } from '../utils/posts';
+const { title, description, pubDate, tags = [], href } = Astro.props;
+---
+<article class="post-card">
+  <p class="post-date">{pubDate.toLocaleDateString('zh-CN')}</p>
+  <h2><a href={href}>{title}</a></h2>
+  <p>{description}</p>
+  {tags.length > 0 && <div class="tags" aria-label="文章标签">{tags.map((tag) => <a href={tagHref(tag)}>{tag}</a>)}</div>}
+</article>
