@@ -111,16 +111,16 @@ npm run preview
 
 各页提供独立标题、摘要、自引用 canonical、Open Graph 和 Twitter Card；文章额外提供 BlogPosting JSON-LD。默认分享图由现有头像源图裁切生成 1200×630 JPEG，文章的 title、description、pubDate 和可选 updatedDate 同步到元数据。搜索页和 404 设为 noindex，不进入站点地图；草稿不会生成文章页或进入地图。
 
-构建自动生成 /sitemap-index.xml、/sitemap-0.xml 和 /robots.txt。正式地址统一通过构建环境变量 SITE_URL 配置，必须为完整 HTTPS 域名（不含子目录、查询参数或锚点）。PowerShell 示例（把示例地址换成真实域名）：
+构建自动生成 /sitemap-index.xml、/sitemap-0.xml 和 /robots.txt。正式地址统一通过构建环境变量 SITE_URL 配置，必须为完整 HTTPS 域名（不含子目录、查询参数或锚点）。当前 GitHub Pages 地址为 `https://broderk.github.io`；PowerShell 本地验证示例：
 
 ```powershell
-$env:SITE_URL = 'https://your-domain.com'
+$env:SITE_URL = 'https://broderk.github.io'
 npm run build
 npm run preview
 ```
 
 部署平台也需设置相同的 SITE_URL 后重新构建；环境变量不会自动跨终端保存。canonical、分享链接、站点地图和 RSS 会同步使用该地址。robots.txt 允许抓取并提供正式 Sitemap 链接，站内搜索和 404 仍为 noindex。
 
-正式域名暂未确定；不设置 SITE_URL 时只生成 localhost 本地预览链接，全站标记 noindex，robots.txt 不提供待发布的 Sitemap 地址。请勿直接部署本地预览产物。域名确认后重新构建，并检查 canonical、分享图、RSS 和 sitemap 是否已替换为真实 HTTPS 地址。
+不设置 SITE_URL 时只生成 localhost 本地预览链接，全站标记 noindex，robots.txt 不提供正式 Sitemap 地址。请勿直接部署本地预览产物；GitHub Pages 工作流已经配置正式 SITE_URL。若后续使用自定义域名，需同步修改工作流的 SITE_URL 并重新检查 canonical、分享图、RSS 和 sitemap。
 
 独立分类体系可在后续按需要添加。
